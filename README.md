@@ -1,24 +1,20 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+:: Technical Documentation ::  
 
-Things you may want to cover:
+Ruby version = 3.1.3
+Rails version = 7.0.8
+Bundler version = 2.4.19
 
-* Ruby version
+Set Enviroment variables in .env file
+DISCOURSE_BASE_URL=https://forum.dryfastingclub.com
+DISCOURSE_API_KEY=
+DISCOURSE_API_USERNAME=
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+it will run the rake task every 24 hours from  schedule.rb file
+RAILS_ENV=development bundle exec whenever --update-crontab
+RAILS_ENV=production bundle exec whenever --update-crontab
+to see the cronjobs
+crontab -l
+To remove jobs entries
+crontab -r
