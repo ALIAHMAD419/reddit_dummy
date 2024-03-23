@@ -9,23 +9,32 @@ class RedditScraper
 
   def scrape
     uri = URI("https://www.reddit.com/r/#{@subreddit}/.json")
-    response = Net::HTTP.get_response(uri)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
 
-      if response.is_a?(Net::HTTPSuccess)
-        data = JSON.parse(response.body)
-        extract_posts(data)
-      else
-        # Print the full response for debugging purposes
-        puts "Failed to fetch data from Reddit. Status code: #{response.code}"
-        puts "Response body: #{response.body}"
-        []
-      end
-    rescue StandardError => e
-      # Print the exception message and backtrace for debugging purposes
-      puts "An error occurred while fetching data from Reddit: #{e.message}"
-      puts e.backtrace.join("\n")
+    request = Net::HTTP::Get.new(uri)
+    # request['Authorization'] = "Bearer #{@access_token}"
+    # request['Authorization'] = "Bearer LyMWe3PpoPM9_bVNJdvdrA"
+    request['User-Agent'] = "Ali Ahmad"
+
+    response = http.request(request)
+
+    if response.is_a?(Net::HTTPSuccess)
+      data = JSON.parse(response.body)
+      extract_posts(data)
+    else
+      # Print the full response for debugging purposes
+      puts "Failed to fetch data from Reddit. Status code: #{response.code}"
+      puts "Response body: #{response.body}"
       []
+    end
+  rescue StandardError => e
+    # Print the exception message and backtrace for debugging purposes
+    puts "An error occurred while fetching data from Reddit: #{e.message}"
+    puts e.backtrace.join("\n")
+    []
   end
+
 
   private
 
