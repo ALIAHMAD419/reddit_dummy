@@ -11,13 +11,20 @@ class RedditScraper
     uri = URI("https://www.reddit.com/r/#{@subreddit}/.json")
     response = Net::HTTP.get_response(uri)
 
-    if response.is_a?(Net::HTTPSuccess)
-      data = JSON.parse(response.body)
-      extract_posts(data)
-    else
-      puts "Failed to fetch data from Reddit. Status code: #{response.code}"
+      if response.is_a?(Net::HTTPSuccess)
+        data = JSON.parse(response.body)
+        extract_posts(data)
+      else
+        # Print the full response for debugging purposes
+        puts "Failed to fetch data from Reddit. Status code: #{response.code}"
+        puts "Response body: #{response.body}"
+        []
+      end
+    rescue StandardError => e
+      # Print the exception message and backtrace for debugging purposes
+      puts "An error occurred while fetching data from Reddit: #{e.message}"
+      puts e.backtrace.join("\n")
       []
-    end
   end
 
   private
